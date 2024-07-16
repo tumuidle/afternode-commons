@@ -7,4 +7,5 @@ include 'commons'
 include 'bukkit'
 include 'bukkit-kotlin'
 include 'adventure-messaging'
+include 'bungee'
 
