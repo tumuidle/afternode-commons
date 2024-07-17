@@ -129,7 +129,7 @@ public class BukkitPluginContext {
     /**
      * Set plugin display name
      * @param name Target name
-     * @see PluginDescriptionFile#name
+     * @see PluginDescriptionFile#getName()
      */
     public void setDisplayName(String name) {
         Field field = null;
