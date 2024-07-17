@@ -107,7 +107,7 @@ class ClickBuilder {
 
 /**
  * Build Adventure component with MessageBuilder
- * @see cn.afternode.commons.bukkit.kotlin.MessageBuilder
+ * @see cn.afternode.commons.bukkit.message.MessageBuilder
  */
 fun message(locale: ILocalizations? = null, linePrefix: ComponentLike = Component.empty(), sender: CommandSender? = null, block: MessageBuilder.() -> Unit): Component {
     val mb = MessageBuilder(locale, linePrefix, sender)

@@ -11,7 +11,7 @@ import net.kyori.adventure.text.format.TextColor;
 import java.awt.*;
 
 /**
- * Adventure-API implementation of MessageBUilder
+ * Adventure-API implementation of MessageBuilder
  */
 public class AdvntrMessageBuilder {
     private ComponentLike linePrefix = Component.text();
