@@ -32,7 +32,7 @@ public class BungeeTabBuilder {
      * Append completions
      * @param append Contents
      */
-    public BungeeTabBuilder append(String... append) {
+    public BungeeTabBuilder appendAll(String... append) {
         comp.addAll(Arrays.asList(append));
         return this;
     }
