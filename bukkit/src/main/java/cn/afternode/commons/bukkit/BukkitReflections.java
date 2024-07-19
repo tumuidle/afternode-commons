@@ -7,6 +7,7 @@ import org.bukkit.plugin.SimplePluginManager;
 
 import java.lang.reflect.Field;
 
+@SuppressWarnings("removal")
 public class BukkitReflections {
     /**
      * Get commandMap in SimplePluginManager
