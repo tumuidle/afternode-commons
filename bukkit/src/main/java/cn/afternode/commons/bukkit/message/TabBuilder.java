@@ -22,6 +22,8 @@ public class TabBuilder {
         this.sender = sender;
     }
 
+    public TabBuilder() {}
+
     public CommandSender getSender() {
         return sender;
     }
