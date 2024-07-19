@@ -2,6 +2,9 @@ package cn.afternode.commons.binary;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class WrappedByteBuffer {
     public static final int DEFAULT_SIZE = 65535;
@@ -280,6 +283,84 @@ public class WrappedByteBuffer {
         }
     }
     // Enum END
+
+    // Iterable start
+
+    /**
+     * Write collections
+     * @param col Source
+     * @param writer Serializer
+     * @param <T> Type
+     */
+    public <T> void writeCollection(Collection<T> col, BiConsumer<T, WrappedByteBuffer> writer) {
+        this.writeInt(col.size());
+        for (T t : col) {
+            writer.accept(t, this);
+        }
+    }
+
+    /**
+     * Write string collection
+     * @param col Source
+     */
+    public void writeStringCollection(Collection<String> col) {
+        this.writeCollection(col, WrappedByteBuffer::stringIterableWriter);
+    }
+
+    /**
+     * Read to ArrayList
+     * @param reader Deserializer
+     * @return Result
+     * @param <T> Type
+     */
+    public <T> List<T> readList(Function<WrappedByteBuffer, T> reader) {
+        int size = this.readInt();
+        List<T> target = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            target.add(reader.apply(this));
+        }
+        return target;
+    }
+
+    /**
+     * Read string to array list
+     * @return Result
+     */
+    public List<String> readStringList() {
+        return this.readList(WrappedByteBuffer::stringIterableReader);
+    }
+
+    /**
+     * Read to HashSet
+     * @param reader Deserializer
+     * @return Result
+     * @param <T> Type
+     */
+    public <T> Set<T> readSet(Function<WrappedByteBuffer, T> reader) {
+        int size = this.readInt();
+        Set<T> target = new HashSet<>(size);
+        for (int i = 0; i < size; i++) {
+            target.add(reader.apply(this));
+        }
+        return target;
+    }
+
+    /**
+     * Read string to HashSet
+     * @return Result
+     */
+    public Set<String> readStringSet() {
+        return this.readSet(WrappedByteBuffer::stringIterableReader);
+    }
+
+    private static String stringIterableReader(WrappedByteBuffer wbb) {
+        return wbb.readUtf();
+    }
+
+    private static void stringIterableWriter(String str, WrappedByteBuffer wbb) {
+        wbb.writeUtf(str);
+    }
+    // Iterable end
 
     /**
      * Reset reader offset
