@@ -4,7 +4,12 @@ import cn.afternode.commons.ReflectionError;
 import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
+import cn.afternode.commons.bukkit.message.MessageBuilder;
+import cn.afternode.commons.bukkit.message.TabBuilder;
+import cn.afternode.commons.localizations.ILocalizations;
 import cn.afternode.commons.serialization.FieldAccessException;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.event.Listener;
@@ -20,6 +25,9 @@ import java.util.Set;
 
 public class BukkitPluginContext {
     private final Plugin plugin;
+
+    private ComponentLike messageLinePrefix = Component.text().build();
+    private ILocalizations localizations = null;
 
     /**
      * @param plg Plugin instance will be used in registrations
@@ -144,7 +152,60 @@ public class BukkitPluginContext {
         }
     }
 
+    /**
+     * Create MessageBuilder with localizations and prefix in this context
+     * @param sender Sender passed to MessageBuilder
+     * @return builder
+     */
+    public MessageBuilder message(CommandSender sender) {
+        return new MessageBuilder().localizations(localizations).linePrefix(messageLinePrefix).sender(sender);
+    }
+
+    /**
+     * Create MessageBuilder with localizations and prefix in this context
+     * @return builder
+     */
+    public MessageBuilder message() {
+        return new MessageBuilder().localizations(localizations).linePrefix(messageLinePrefix);
+    }
+
+    /**
+     * Get plugin of this context
+     * @return Plugin
+     */
     public Plugin getPlugin() {
         return plugin;
+    }
+
+    /**
+     * Get message line prefix of this context
+     * @return Message line prefix
+     */
+    public ComponentLike getMessageLinePrefix() {
+        return messageLinePrefix;
+    }
+
+    /**
+     * Set message line prefix of this context
+     * @param messageLinePrefix Prefix
+     */
+    public void setMessageLinePrefix(ComponentLike messageLinePrefix) {
+        this.messageLinePrefix = messageLinePrefix;
+    }
+
+    /**
+     * Get localizations of this context
+     * @return Localizations
+     */
+    public ILocalizations getLocalizations() {
+        return localizations;
+    }
+
+    /**
+     * Set localizations of this context
+     * @param localizations Localizations
+     */
+    public void setLocalizations(ILocalizations localizations) {
+        this.localizations = localizations;
     }
 }

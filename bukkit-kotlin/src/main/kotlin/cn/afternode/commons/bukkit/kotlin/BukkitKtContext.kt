@@ -8,6 +8,8 @@ import net.kyori.adventure.text.ComponentLike
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.Plugin
 
+@Deprecated("Deprecated",
+    replaceWith = ReplaceWith("BukkitPluginContext", "cn.afternode.commons.bukkit.BukkitPluginContext"))
 class BukkitKtContext(val plugin: Plugin) {
     /**
      * Line prefix for MessageBuilder
