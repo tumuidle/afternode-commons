@@ -82,6 +82,31 @@ public class WrappedByteBuffer {
         readOff += buf.length;
     }
     // Bytes END
+
+    // Block START
+    public byte[] readBlock(int off) {
+        byte[] data = new byte[this.readShort(off)];
+        int nOff = off + 4;
+        src.get(data, nOff, data.length);
+        return data;
+    }
+
+    public byte[] readBlock() {
+        return this.readBlock(this.readOff);
+    }
+
+    public void writeBlock(byte[] data, int off) {
+        if (data.length >= Short.MAX_VALUE)
+            throw new ArrayIndexOutOfBoundsException("Byte array too large");
+
+        this.writeShort((short) data.length, off);
+        this.writeBytes(data, off, data.length);
+    }
+
+    public void writeBlock(byte[] data) {
+        this.writeBlock(data, this.writeOff);
+    }
+    // Block END
     
     // Integer START
 
