@@ -414,4 +414,8 @@ public class WrappedByteBuffer {
     public byte[] array() {
         return this.src.array();
     }
+
+    public ByteBuffer src() {
+        return this.src;
+    }
 }
