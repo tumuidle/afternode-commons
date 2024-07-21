@@ -171,6 +171,16 @@ public class WrappedByteBuffer {
     }
     // Short END
 
+    // Long start
+    public void writeLong(long v) {
+        this.src.putLong(v);
+    }
+
+    public long readLong() {
+        return this.src.getLong();
+    }
+    // Long end
+
     // UTF START
     /**
      * Write UTF-8 encoded string with specified offset
@@ -361,6 +371,17 @@ public class WrappedByteBuffer {
         wbb.writeUtf(str);
     }
     // Iterable end
+
+    // UUID start
+    public void writeUUID(UUID id) {
+        this.writeLong(id.getMostSignificantBits());
+        this.writeLong(id.getLeastSignificantBits());
+    }
+
+    public UUID readUUID() {
+        return new UUID(this.readLong(), this.readLong());
+    }
+    // UUID end
 
     /**
      * Reset reader offset
