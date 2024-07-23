@@ -3,6 +3,7 @@ package cn.afternode.commons.bukkit.kotlin
 import cn.afternode.commons.bukkit.BukkitPluginContext
 import cn.afternode.commons.bukkit.message.MessageBuilder
 import cn.afternode.commons.bukkit.message.TabBuilder
+import cn.afternode.commons.bukkit.report.PluginReport
 import net.kyori.adventure.text.TextComponent
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.Plugin
@@ -57,4 +58,14 @@ fun BukkitPluginContext.tab(block: TabBuilder.() -> Unit): MutableList<String> {
     val builder = TabBuilder()
     block(builder)
     return builder.build()
+}
+
+/**
+ * Create plugin report
+ * @see BukkitPluginContext.createReport
+ */
+fun BukkitPluginContext.report(block: PluginReport.() -> Unit): PluginReport {
+    val report = this.createReport()
+    block(report)
+    return report
 }
