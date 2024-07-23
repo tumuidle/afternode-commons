@@ -5,19 +5,22 @@ import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
 import cn.afternode.commons.bukkit.message.MessageBuilder;
-import cn.afternode.commons.bukkit.message.TabBuilder;
 import cn.afternode.commons.localizations.ILocalizations;
 import cn.afternode.commons.serialization.FieldAccessException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -207,5 +210,20 @@ public class BukkitPluginContext {
      */
     public void setLocalizations(ILocalizations localizations) {
         this.localizations = localizations;
+    }
+
+    /**
+     * Load localizations from plugin resources
+     * @param resource Resource path
+     */
+    public void loadLocalizations(String resource) throws IOException {
+        YamlConfiguration loc;
+        try (InputStream s = plugin.getResource(resource)) {
+            if (s == null) {
+                loc = new YamlConfiguration();
+            } else
+                loc = YamlConfiguration.loadConfiguration(new InputStreamReader(s));
+        }
+        this.localizations = new ConfigurationLocalizations(loc);
     }
 }
