@@ -5,6 +5,7 @@ import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
 import cn.afternode.commons.bukkit.message.MessageBuilder;
+import cn.afternode.commons.bukkit.report.PluginReport;
 import cn.afternode.commons.localizations.ILocalizations;
 import cn.afternode.commons.serialization.FieldAccessException;
 import net.kyori.adventure.text.Component;
@@ -225,5 +226,13 @@ public class BukkitPluginContext {
                 loc = YamlConfiguration.loadConfiguration(new InputStreamReader(s));
         }
         this.localizations = new ConfigurationLocalizations(loc);
+    }
+
+    /**
+     * Create PluginReport
+     * @return Report
+     */
+    public PluginReport createReport() {
+        return new PluginReport(this.plugin);
     }
 }
