@@ -4,6 +4,8 @@ package cn.afternode.commons.bukkit.update;
  * Simple SemVer parser
  */
 public class SemVer {
+    private final String src;
+
     private final int major;
     private final int minor;
     private final int patch;
@@ -15,11 +17,25 @@ public class SemVer {
      * @param version Version
      */
     public SemVer(String version) {
-        String[] parts = version.split("-");
+        int numIndex = -1;
+        char[] cs = version.toCharArray();
+        for (int i = 0; i < cs.length; i++) {
+            try {
+                Integer.parseInt(String.valueOf(cs[i]));
+                numIndex = i;
+                break;
+            } catch (NumberFormatException ignored) {}
+        }
+        if (numIndex == -1)
+            throw new IllegalArgumentException("Cannot parse string %s as SemVer".formatted(version));
+
+        this.src = version.substring(numIndex);
+
+        String[] parts = src.split("-");
         String[] vParts = parts[0].split("\\.");
         major = Integer.parseInt(vParts[0]);
         minor = Integer.parseInt(vParts[1]);
-        if (parts.length >= 3) {
+        if (vParts.length >= 3) {
             patch = Integer.parseInt(vParts[2]);
         } else {
             patch = 0;
@@ -64,5 +80,34 @@ public class SemVer {
      */
     public String getExtra() {
         return extra;
+    }
+
+    @Override
+    public String toString() {
+        return "SemVer{" +
+                "src='" + src + '\'' +
+                ", major=" + major +
+                ", minor=" + minor +
+                ", patch=" + patch +
+                ", extra='" + extra + '\'' +
+                '}';
+    }
+
+    /**
+     * Compare semver
+     * @param fromStr From
+     * @param targetStr Target
+     * @return Is target newer than from
+     */
+    public static boolean isNewerThan(String fromStr, String targetStr) {
+        SemVer target = new SemVer(targetStr);
+        SemVer from = new SemVer(fromStr);
+
+        if (target.major != from.major) {
+            return target.major > from.major;
+        } else if (target.minor != from.minor) {
+            return target.minor > from.minor;
+        }
+        return target.patch > from.patch;
     }
 }

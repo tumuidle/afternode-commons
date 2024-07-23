@@ -89,9 +89,6 @@ public class ModrinthVersionInfo {
      * @see SemVer
      */
     public boolean isNewerThanSemver(String version) {
-        SemVer target = new SemVer(version);
-        SemVer self = new SemVer(this.versionNumber);
-
-        return self.getMajor() > target.getMajor() || self.getMinor() > target.getMinor() || self.getPatch() > target.getPatch();
+        return SemVer.isNewerThan(version, this.versionNumber);
     }
 }

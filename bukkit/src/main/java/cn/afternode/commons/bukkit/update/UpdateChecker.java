@@ -44,6 +44,14 @@ public class UpdateChecker {
         return version.get(0);
     }
 
+    public static String getHangarLatestVersion(String slug) throws IOException {
+        return get("https://hangar.papermc.io/api/v1/projects/%s/latestrelease".formatted(slug));
+    }
+
+    public static SpigetVersionInfo getSpigetLatestVersion(String resourceId) throws IOException {
+        return new Gson().fromJson(get("https://api.spiget.org/v2/resources/%s/versions/latest".formatted(resourceId)), SpigetVersionInfo.class);
+    }
+
     private static String get(String urlString) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
