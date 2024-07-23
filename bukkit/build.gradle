@@ -17,6 +17,9 @@ dependencies {
 
     api project(":commons")
     compileOnly libs.reflections
+
+    testImplementation libs.gson
+    testImplementation libs.guava
 }
 
 test {
