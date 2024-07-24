@@ -162,7 +162,7 @@ public class BukkitPluginContext {
      * @return builder
      */
     public MessageBuilder message(CommandSender sender) {
-        return new MessageBuilder().localizations(localizations).linePrefix(messageLinePrefix).sender(sender);
+        return new MessageBuilder(localizations, messageLinePrefix, sender);
     }
 
     /**
@@ -170,7 +170,7 @@ public class BukkitPluginContext {
      * @return builder
      */
     public MessageBuilder message() {
-        return new MessageBuilder().localizations(localizations).linePrefix(messageLinePrefix);
+        return new MessageBuilder(localizations, messageLinePrefix, null);
     }
 
     /**
