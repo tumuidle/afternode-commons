@@ -8,4 +8,5 @@ dependencies {
     compileOnly libs.bungeecord.api
 
     api project(":commons")
+    compileOnly libs.netty.buffer
 }
