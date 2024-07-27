@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'cn.afternode.commons'
-version = '2.2.0'
+version = '2.3.0'
 
 allprojects {
     tasks.withType(JavaCompile).configureEach {
@@ -67,6 +67,7 @@ subprojects {
             maven {
                 name = "OSSRH"
                 url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+//                url = "https://s01.oss.sonatype.org/content/groups/staging/"
                 credentials {
                     username = project.hasProperty("ossrhUsername") ? project.ossrhUsername : "NONE"
                     password = project.hasProperty("ossrhPassword") ? project.ossrhPassword : "NONE"
