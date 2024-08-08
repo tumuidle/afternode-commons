@@ -93,7 +93,7 @@ public class MessageBuilder {
     }
 
     /**
-     * Append localized text, a localizations object must be passed to this builder
+     * Append localized text with placeholder, a localizations object must be passed to this builder
      * @param key Localization key
      * @param placeholders Localization placeholder
      * @return This builder
@@ -106,6 +106,22 @@ public class MessageBuilder {
             throw new NullPointerException("No localizations passed to this builder");
         ComponentStyle style = style();
         component.append(style == null ? Component.text(this.localizations.get(key, placeholders)) : Component.text(this.localizations.get(key, placeholders), style.build()));
+        return this;
+    }
+
+    /**
+     * Append localized text, a localizations object must be passed to this builder
+     * @param key Localization key
+     * @return This builder
+     * @see #localizations
+     * @see #localizations(ILocalizations)
+     * @see ILocalizations#get(String, Map)
+     */
+    public MessageBuilder localize(String key) {
+        if (localizations == null)
+            throw new NullPointerException("No localizations passed to this builder");
+        ComponentStyle style = style();
+        component.append(style == null ? Component.text(this.localizations.get(key)) : Component.text(this.localizations.get(key), style.build()));
         return this;
     }
 
