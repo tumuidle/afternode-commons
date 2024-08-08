@@ -1,5 +1,6 @@
 package cn.afternode.commons.bukkit.kotlin
 
+import cn.afternode.commons.bukkit.message.ComponentStyle
 import cn.afternode.commons.bukkit.message.MessageBuilder
 import org.bukkit.permissions.Permission
 
@@ -25,27 +26,33 @@ fun MessageBuilder.append(builder: MessageBuilder): MessageBuilder {
     return this
 }
 
-fun MessageBuilder.sub(block: MessageBuilder.() -> Unit): MessageBuilder {
-    val builder = MessageBuilder(localizations, linePrefix, sender)
+fun MessageBuilder.sub(styleStack: Boolean = false, block: MessageBuilder.() -> Unit): MessageBuilder {
+    val builder = MessageBuilder(localizations, linePrefix, sender, styleStack)
     block(builder)
     this.append(builder)
     return this
 }
 
-fun MessageBuilder.permission(permission: String, block: MessageBuilder.() -> Unit): MessageBuilder {
+fun MessageBuilder.permission(permission: String, styleStack: Boolean = false, block: MessageBuilder.() -> Unit): MessageBuilder {
     if (sender.hasPermission(permission)) {
-        val builder = MessageBuilder(localizations, linePrefix, sender)
+        val builder = MessageBuilder(localizations, linePrefix, sender, styleStack)
         block(builder)
         this.append(builder)
     }
     return this
 }
 
-fun MessageBuilder.permission(permission: Permission, block: MessageBuilder.() -> Unit): MessageBuilder {
+fun MessageBuilder.permission(permission: Permission, styleStack: Boolean = false, block: MessageBuilder.() -> Unit): MessageBuilder {
     if (sender.hasPermission(permission)) {
-        val builder = MessageBuilder(localizations, linePrefix, sender)
+        val builder = MessageBuilder(localizations, linePrefix, sender, styleStack)
         block(builder)
         this.append(builder)
     }
+    return this
+}
+
+fun MessageBuilder.pushStyle(block: ComponentStyle.() -> Unit): MessageBuilder {
+    this.pushStyle()
+    block(this.style())
     return this
 }

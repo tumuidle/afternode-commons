@@ -14,32 +14,82 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.Map;
+import java.util.Stack;
 
 public class MessageBuilder {
     private ILocalizations localizations;
     private ComponentLike linePrefix = Component.text();
     private CommandSender sender;
 
+    private Stack<ComponentStyle> styleStack = null;
+
     private final TextComponent.Builder component = Component.text();
 
     public MessageBuilder(
             @Nullable ILocalizations locale,
             @Nullable ComponentLike linePrefix,
-            @Nullable CommandSender sender
+            @Nullable CommandSender sender,
+            boolean styleStack
             ) {
         this.localizations = locale;
         if (linePrefix != null) this.linePrefix = linePrefix;
         this.sender = sender;
+        if (styleStack)
+            useStyleStack();
 
         component.append(this.linePrefix);
     }
 
     public MessageBuilder(@Nullable ILocalizations locale) {
-        this(locale, null, null);
+        this(locale, null, null, false);
     }
 
     public MessageBuilder() {
-        this(null, null, null);
+        this(null, null, null, false);
+    }
+
+    public MessageBuilder(boolean styleStack) {
+        this(null, null, null, styleStack);
+    }
+
+    /**
+     * Push a default style to the stack
+     */
+    public void pushStyle() {
+        styleStack.push(new ComponentStyle());
+    }
+
+    /**
+     * Get style at top of stack
+     * @return Style, or null if style stack not enabled
+     */
+    public ComponentStyle style() {
+        if (styleStack != null)
+            return styleStack.peek();
+        else return null;
+    }
+
+    /**
+     * Pop style stack
+     */
+    public void popStyle() {
+        styleStack.pop();
+    }
+
+    /**
+     * Clear style stack and push a default style
+     */
+    public void clearStyle() {
+        styleStack.clear();
+        styleStack.push(new ComponentStyle());
+    }
+
+    /**
+     * Enable style stack and push a default style
+     */
+    public void useStyleStack() {
+        this.styleStack = new Stack<>();
+        this.styleStack.push(new ComponentStyle());
     }
 
     /**
@@ -54,7 +104,8 @@ public class MessageBuilder {
     public MessageBuilder localize(String key, Map<String, Object> placeholders) {
         if (localizations == null)
             throw new NullPointerException("No localizations passed to this builder");
-        component.append(Component.text(this.localizations.get(key, placeholders)));
+        ComponentStyle style = style();
+        component.append(style == null ? Component.text(this.localizations.get(key, placeholders)) : Component.text(this.localizations.get(key, placeholders), style.build()));
         return this;
     }
 
@@ -64,12 +115,13 @@ public class MessageBuilder {
      * @return This builder
      */
     public MessageBuilder text(String text) {
-        this.component.append(Component.text(text));
+        ComponentStyle style = style();
+        this.component.append(style == null ? Component.text(text) : Component.text(text, style.build()));
         return this;
     }
 
     /**
-     * Append colored raw text
+     * Append colored raw text (overwrites style)
      * @param text Raw text
      * @param color AWT color
      * @return This builder
@@ -81,7 +133,7 @@ public class MessageBuilder {
     }
 
     /**
-     * Append MiniMessage
+     * Append MiniMessage (overwrites style)
      * <br>
      * <a href="https://docs.advntr.dev/minimessage/index.html">MiniMessage docs</a>
      *

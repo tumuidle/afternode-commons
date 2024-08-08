@@ -31,6 +31,7 @@ public class BukkitPluginContext {
     private final Plugin plugin;
 
     private ComponentLike messageLinePrefix = Component.text().build();
+    private boolean messageBuilderStyleStack = false;
     private ILocalizations localizations = null;
 
     /**
@@ -162,7 +163,7 @@ public class BukkitPluginContext {
      * @return builder
      */
     public MessageBuilder message(CommandSender sender) {
-        return new MessageBuilder(localizations, messageLinePrefix, sender);
+        return new MessageBuilder(localizations, messageLinePrefix, sender, messageBuilderStyleStack);
     }
 
     /**
@@ -170,7 +171,23 @@ public class BukkitPluginContext {
      * @return builder
      */
     public MessageBuilder message() {
-        return new MessageBuilder(localizations, messageLinePrefix, null);
+        return new MessageBuilder(localizations, messageLinePrefix, null, messageBuilderStyleStack);
+    }
+
+    /**
+     * Set if use style stack for MessageBuilder in default
+     * @param messageBuilderStyleStack State
+     */
+    public void setMessageBuilderStyleStack(boolean messageBuilderStyleStack) {
+        this.messageBuilderStyleStack = messageBuilderStyleStack;
+    }
+
+    /**
+     * Get status of default style stack for MessageBuilder
+     * @return State
+     */
+    public boolean isMessageBuilderStyleStack() {
+        return messageBuilderStyleStack;
     }
 
     /**
