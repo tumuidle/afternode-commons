@@ -32,9 +32,14 @@ abstract class BaseCommand(
     open fun tab(sender: CommandSender, vararg args: String): MutableList<String> = mutableListOf()
 
     /**
-     * Register this command through CommandMap
+     * Register this command to server's CommandMap
      * @param fallbackPrefix A prefix which is prepended to each command with a ':' one or more times to make the command unique
      * @see org.bukkit.command.CommandMap.register(java.lang.String, org.bukkit.command.Command)
      */
     fun register(fallbackPrefix: String) = BukkitReflections.getCommandMap().register(fallbackPrefix, this)
+
+    /**
+     * Unregister this command from server's CommandMap
+     */
+    fun unregister() = this.unregister(BukkitReflections.getCommandMap())
 }
