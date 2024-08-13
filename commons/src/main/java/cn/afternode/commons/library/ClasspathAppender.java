@@ -65,19 +65,11 @@ public class ClasspathAppender {
      * Append to URLClassLoader
      */
     public static void ucl(URL url, URLClassLoader ldr) {
-        Method md;
         try {
-            md = ldr.getClass().getDeclaredMethod("addURL", URL.class);
-        } catch (Throwable t) {
-            throw new ReflectionError(ldr.getClass(), t);
-        }
-
-
-        md.trySetAccessible();
-        try {
-            md.invoke(ldr, url);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new ReflectionError(md, ldr.getClass(), e);
+            MethodHandle mh = lookup.findVirtual(URLClassLoader.class, "addURL", MethodType.methodType(void.class, URL.class));
+            mh.invoke(ldr, url);
+        } catch (Throwable e) {
+            throw new ReflectionError(ldr.getClass(), e);
         }
     }
 
