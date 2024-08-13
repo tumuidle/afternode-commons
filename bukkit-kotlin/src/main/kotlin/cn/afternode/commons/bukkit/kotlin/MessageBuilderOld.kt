@@ -27,7 +27,7 @@ class HoverBuilder {
      * @see MessageBuilder
      */
     fun showText(locale: ILocalizations? = null, linePrefix: ComponentLike? = null, builder: MessageBuilder.() -> Unit) {
-        val mb = MessageBuilder(locale, linePrefix, null)
+        val mb = MessageBuilder(locale, linePrefix, null, false)
         builder.invoke(mb)
         showText(mb.build())
     }
@@ -90,9 +90,11 @@ class ClickBuilder {
     /**
      * Run callback
      */
+    /*
     fun callback(callback: (Audience) -> Unit) {
         event = ClickEvent.callback(callback)
     }
+     */
 
     /**
      * Fill with custom ClickEvent
@@ -109,8 +111,8 @@ class ClickBuilder {
  * Build Adventure component with MessageBuilder
  * @see cn.afternode.commons.bukkit.message.MessageBuilder
  */
-fun message(locale: ILocalizations? = null, linePrefix: ComponentLike = Component.empty(), sender: CommandSender? = null, block: MessageBuilder.() -> Unit): Component {
-    val mb = MessageBuilder(locale, linePrefix, sender)
+fun message(locale: ILocalizations? = null, linePrefix: ComponentLike = Component.empty(), sender: CommandSender? = null, styleStack: Boolean = false, block: MessageBuilder.() -> Unit): Component {
+    val mb = MessageBuilder(locale, linePrefix, sender, styleStack)
     block.invoke(mb)
     return mb.build()
 }
