@@ -6,6 +6,7 @@ import sun.misc.Unsafe;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,8 +24,7 @@ public class ClasspathAppender {
             unsafe = (Unsafe) unsafeField.get(null);
 
             Field lookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
-            lookupField.trySetAccessible();
-            lookup = (MethodHandles.Lookup) lookupField.get(null);
+            lookup = (MethodHandles.Lookup) unsafe.getObject(unsafe.staticFieldBase(lookupField), unsafe.staticFieldOffset(lookupField));
         } catch (Throwable t) {
             throw new ExceptionInInitializerError(t);
         }
@@ -92,7 +92,7 @@ public class ClasspathAppender {
         Object ucp = unsafe.getObject(ldr, unsafe.objectFieldOffset(ucpField));
 
         MethodHandle hnd = lookup.findVirtual(ucp.getClass(), "addURL", MethodType.methodType(void.class, URL.class));
-        hnd.invoke(ldr, url);
+        hnd.invoke(ucp, url);
     }
 
     static {
