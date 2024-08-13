@@ -12,8 +12,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
     compileOnlyApi libs.paper.api
-    compileOnly libs.advntr.api
-    compileOnly libs.advntr.minimessage
+    compileOnly libs.paper.advntr
+    compileOnly libs.paper.minimessage
 
     api project(":commons")
     compileOnly libs.reflections

@@ -201,7 +201,7 @@ public class MessageBuilder {
      * @see #linePrefix(ComponentLike)
      */
     public MessageBuilder line() {
-        this.component.appendNewline();
+        this.component.append(Component.newline());
         this.component.append(linePrefix);
         return this;
     }
@@ -211,7 +211,7 @@ public class MessageBuilder {
      * @return This builder
      */
     public MessageBuilder emptyLine() {
-        this.component.appendNewline();
+        this.component.append(Component.newline());
         return this;
     }
 
