@@ -7,7 +7,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly libs.advntr.api
+    compileOnly libs.paper.advntr
+    compileOnly libs.paper.minimessage
 }
 
 test {

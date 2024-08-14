@@ -7,8 +7,10 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.awt.*;
+import java.util.Stack;
 
 /**
  * Adventure-API implementation of MessageBuilder
@@ -38,6 +40,19 @@ public class AdvntrMessageBuilder {
      */
     public AdvntrMessageBuilder text(String text, Color color) {
         this.component.append(Component.text(text).color(TextColor.color(color.getRGB())));
+        return this;
+    }
+
+    /**
+     * Append MiniMessage (overwrites style)
+     * <br>
+     * <a href="https://docs.advntr.dev/minimessage/index.html">MiniMessage docs</a>
+     *
+     * @param mini MiniMessage string
+     * @return This builder
+     */
+    public AdvntrMessageBuilder mini(String mini) {
+        this.component.append(MiniMessage.miniMessage().deserialize(mini));
         return this;
     }
 
@@ -81,7 +96,7 @@ public class AdvntrMessageBuilder {
      * @see #linePrefix(ComponentLike)
      */
     public AdvntrMessageBuilder line() {
-        this.component.appendNewline();
+        this.component.append(Component.newline());
         this.component.append(linePrefix);
         return this;
     }
@@ -91,7 +106,7 @@ public class AdvntrMessageBuilder {
      * @return This builder
      */
     public AdvntrMessageBuilder emptyLine() {
-        this.component.appendNewline();
+        this.component.append(Component.newline());
         return this;
     }
 
