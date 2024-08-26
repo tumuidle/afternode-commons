@@ -7,6 +7,7 @@ bungeecord = "1.19-R0.1-SNAPSHOT"
 netty = "4.1.112.Final"
 gson = "2.11.0"
 guava = "33.2.1-jre"
+velocity = "3.3.0-SNAPSHOT"
 
 [libraries]
 paper-api = { module = "io.papermc.paper:paper-api", version.ref="paper-api" }
@@ -21,3 +22,4 @@ bungeecord-api = { module = "net.md-5:bungeecord-api", version.ref = "bungeecord
 netty-buffer = { module = "io.netty:netty-buffer", version.ref = "netty" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }

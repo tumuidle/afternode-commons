@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    maven { url "https://repo.papermc.io/repository/maven-public/" }
+}
+
+dependencies {
+    compileOnly libs.velocity
+}
