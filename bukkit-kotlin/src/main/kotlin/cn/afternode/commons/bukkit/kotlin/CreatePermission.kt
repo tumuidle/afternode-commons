@@ -23,6 +23,10 @@ class CreatePermission(val node: String, val parent: Permission? = null, val def
 
         return perm
     }
+
+    operator fun getValue(nothing: Nothing?, property: KProperty<*>): Permission {
+        return this.create()
+    }
 }
 
 /**
