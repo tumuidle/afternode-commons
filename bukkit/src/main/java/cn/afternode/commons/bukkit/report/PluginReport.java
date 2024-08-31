@@ -80,6 +80,16 @@ public class PluginReport {
     }
 
     /**
+     * Append custom content
+     * @param title Title
+     * @param content Content
+     * @return This builder
+     */
+    public PluginReport withCustom(String title, String content) {
+        return this.appendElement(new CustomElement(title, content));
+    }
+
+    /**
      * Build to string
      * @return Result
      */
