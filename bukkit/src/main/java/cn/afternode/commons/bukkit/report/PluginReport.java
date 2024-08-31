@@ -114,7 +114,7 @@ public class PluginReport {
      */
     public void save(Path target) throws IOException {
         if (Files.notExists(target.getParent()))
-            Files.createDirectories(target);
+            Files.createDirectories(target.getParent());
 
         Files.writeString(target, build());
     }
@@ -125,6 +125,16 @@ public class PluginReport {
      */
     public Path save() throws IOException {
         Path result = Path.of("reports").resolve("report-%s-%s.txt".formatted(FILENAME_DATE_TIME_FORMATTER.format(ZonedDateTime.now()), plugin.getName()));
+        this.save(result);
+        return result;
+    }
+
+    /**
+     * Save to plugin data folder
+     * @return Output path
+     */
+    public Path saveToDataFolder() throws IOException {
+        Path result = plugin.getDataFolder().toPath().resolve("report-%s-%s.txt");
         this.save(result);
         return result;
     }
