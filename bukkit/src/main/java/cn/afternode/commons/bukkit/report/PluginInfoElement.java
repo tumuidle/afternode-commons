@@ -5,6 +5,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.List;
+
 /**
  * Plugin information (from plugin.yml/PluginDescriptionFile)
  * @see PluginDescriptionFile
@@ -105,12 +107,12 @@ public class PluginInfoElement implements IPluginReportElement {
         PluginDescriptionFile desc = plugin.getDescription();
         sb.append("Version: ").append(desc.getVersion()).append("\n");
         sb.append("API-Version: ").append(desc.getAPIVersion()).append("\n");
-        if (withWebsite)
+        if (withWebsite && desc.getWebsite() != null)
             sb.append("Website: ").append(desc.getWebsite()).append("\n");
 
         PluginManager mgr = Bukkit.getPluginManager();
 
-        if (withDepends) {
+        if (withDepends && !desc.getDepend().isEmpty()) {
             sb.append("Depends: \n");
             for (String depend : desc.getDepend()) {
                 sb.append("    ").append(depend);
@@ -120,7 +122,7 @@ public class PluginInfoElement implements IPluginReportElement {
             }
         }
 
-        if (withSoftDepends) {
+        if (withSoftDepends && !desc.getSoftDepend().isEmpty()) {
             sb.append("Soft Depends: \n");
             for (String depend : desc.getSoftDepend()) {
                 sb.append("    ").append(depend);
@@ -130,7 +132,7 @@ public class PluginInfoElement implements IPluginReportElement {
             }
         }
 
-        if (withLoadBefore) {
+        if (withLoadBefore && !desc.getLoadBefore().isEmpty()) {
             sb.append("Load Before: \n");
             for (String depend : desc.getLoadBefore()) {
                 sb.append("    ").append(depend);
@@ -140,7 +142,7 @@ public class PluginInfoElement implements IPluginReportElement {
             }
         }
 
-        if (withLibraries) {
+        if (withLibraries && !desc.getLibraries().isEmpty()) {
             sb.append("Libraries: \n");
             for (String library : desc.getLibraries()) {
                 sb.append("    ").append(library);

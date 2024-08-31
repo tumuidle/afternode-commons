@@ -101,7 +101,7 @@ public class PluginReport {
         builder.append("By: ").append(plugin.getName()).append("\n");
 
         for (IPluginReportElement element : elements) {
-            builder.append("\n\n===").append(element.title()).append("===\n");
+            builder.append("===").append(element.title()).append("===\n");
             builder.append(element.build()).append("\n");
         }
 
