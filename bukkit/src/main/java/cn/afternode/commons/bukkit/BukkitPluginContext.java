@@ -4,6 +4,7 @@ import cn.afternode.commons.ReflectionError;
 import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
+import cn.afternode.commons.bukkit.configurations.ConfigurationMerger;
 import cn.afternode.commons.bukkit.message.MessageBuilder;
 import cn.afternode.commons.bukkit.report.PluginReport;
 import cn.afternode.commons.localizations.ILocalizations;
@@ -25,6 +26,9 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Set;
 
 public class BukkitPluginContext {
@@ -251,5 +255,45 @@ public class BukkitPluginContext {
      */
     public PluginReport createReport() {
         return new PluginReport(this.plugin);
+    }
+
+    /**
+     * Load configuration, save to data folder if not exists
+     * @param path Resource and save path in data folder
+     * @return Result
+     * @throws IOException Error in resource loading or file IO
+     * @throws NullPointerException Resource not found
+     */
+    public YamlConfiguration loadConfiguration(String path) throws IOException, NullPointerException {
+        Path pth = plugin.getDataFolder().toPath().resolve(path);
+        if (!Files.exists(pth)) {
+            try (InputStream in = Objects.requireNonNull(plugin.getResource(path), () -> String.format("%s @ resource", path))) {
+                Files.copy(in, pth);
+            }
+        }
+        return YamlConfiguration.loadConfiguration(Files.newBufferedReader(pth));
+    }
+
+    /**
+     * Upgrade configuration, or save if not exists
+     * @param path path Resource and save path in data folder
+     * @return Loaded configuration
+     * @throws IOException Error in resource loading or file IO
+     * @throws NullPointerException Resource not found
+     */
+    public YamlConfiguration upgradeConfiguration(String path) throws IOException, NullPointerException {
+        Path pth = plugin.getDataFolder().toPath().resolve(path);
+        try (InputStream in = Objects.requireNonNull(plugin.getResource(path), () -> String.format("%s @ resource", path))) {
+            YamlConfiguration latest = YamlConfiguration.loadConfiguration(new InputStreamReader(in));
+            if (!Files.exists(pth)) {
+                Files.copy(in, pth);
+                return latest;
+            } else {
+                YamlConfiguration current = YamlConfiguration.loadConfiguration(Files.newBufferedReader(pth));
+                YamlConfiguration out = ConfigurationMerger.migrate(current, latest);
+                out.save(pth.toFile());
+                return out;
+            }
+        }
     }
 }
