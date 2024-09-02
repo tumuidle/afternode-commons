@@ -265,6 +265,26 @@ public class MessageBuilder {
     }
 
     /**
+     * <STRONG>UNSAFE</STRONG>
+     * <br>
+     * Append gradient text, this method uses MiniMessage, may cause injection, NEVER insert player messages with this
+     * <br>
+     * <a href="https://docs.advntr.dev/minimessage/format.html#gradient">MiniMessage docs</a>
+     * @param text Text
+     * @param colors Colors
+     * @return This builder
+     */
+    public MessageBuilder gradient(String text, int... colors) {
+        StringBuilder mini = new StringBuilder();
+        mini.append("<gradient");
+        for (int color : colors) {
+            mini.append(":").append("#%06x".formatted(color));
+        }
+        mini.append(">").append(text).append("</gradient>");
+        return this.mini(mini.toString());
+    }
+
+    /**
      * Convert this builder to an Adventure component
      * @return Adventure component
      */

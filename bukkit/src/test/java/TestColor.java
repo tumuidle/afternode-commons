@@ -22,5 +22,7 @@ public class TestColor {
         }
         mini.append(">").append("TEST").append("</gradient>");
         System.out.println(mini);
+
+        System.out.printf("%06x%n", 0x00d7fb);
     }
 }
