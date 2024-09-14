@@ -16,11 +16,8 @@ public class ConfigurationMerger {
         YamlConfiguration conf = new YamlConfiguration();
 
         Object get;
-        for (String k: dest.getKeys(true)) {
-            get = dest.get(k);
-            if (!(get instanceof ConfigurationSection))
-                conf.set(k, get);
-        }
+        for (String k: dest.getKeys(false))
+            conf.set(k, dest.get(k));
         for (String k: src.getKeys(true)) {
             get = src.get(k);
             if (!(get instanceof ConfigurationSection))
