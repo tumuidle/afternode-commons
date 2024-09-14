@@ -7,7 +7,7 @@ public class ConfigurationMerger {
     /**
      * Create a new YamlConfiguration, write src and dest into it
      * <br>
-     * The contents of src are retained when the key is repeated
+     * The contents of src are retained when the key is duplicated
      * @param src Source configurations
      * @param dest Destination configurations
      * @return Merged
@@ -15,8 +15,17 @@ public class ConfigurationMerger {
     public static YamlConfiguration migrate(ConfigurationSection src, ConfigurationSection dest) {
         YamlConfiguration conf = new YamlConfiguration();
 
-        for (String k: dest.getKeys(true)) conf.set(k, dest.get(k));
-        for (String k: src.getKeys(true)) conf.set(k, src.get(k));
+        Object get;
+        for (String k: dest.getKeys(true)) {
+            get = dest.get(k);
+            if (!(get instanceof ConfigurationSection))
+                conf.set(k, get);
+        }
+        for (String k: src.getKeys(true)) {
+            get = src.get(k);
+            if (!(get instanceof ConfigurationSection))
+                conf.set(k, get);
+        }
 
         return conf;
     }
