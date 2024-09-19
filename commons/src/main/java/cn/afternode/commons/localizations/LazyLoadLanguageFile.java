@@ -72,6 +72,11 @@ public class LazyLoadLanguageFile implements ILocalizations {
         return result;
     }
 
+    @Override
+    public String get(String key, String... args) {
+        return this.get(key).formatted((Object[]) args);
+    }
+
     /**
      * Set autoIgnore enabled
      * @param autoIgnore Target value

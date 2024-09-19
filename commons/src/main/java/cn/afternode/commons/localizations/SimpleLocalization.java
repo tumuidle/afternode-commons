@@ -78,4 +78,9 @@ public class SimpleLocalization implements ILocalizations {
         }
         return get;
     }
+
+    @Override
+    public String get(String key, String... args) {
+        return get(key).formatted((Object[]) args);
+    }
 }

@@ -17,4 +17,13 @@ public interface ILocalizations {
      * @return Result localizations with placeholders applied, or provided key if not found
      */
     String get(String key, Map<String, Object> placeholders);
+
+    /**
+     * Get localizations with java formatter
+     * @param key Localization key
+     * @param args Formater replacements
+     * @return Result localizations with String#format
+     * @see String#formatted(Object...)
+     */
+    String get(String key, String... args);
 }

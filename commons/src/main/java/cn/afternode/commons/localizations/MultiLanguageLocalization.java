@@ -89,4 +89,9 @@ public class MultiLanguageLocalization implements ILocalizations {
         }
         return get;
     }
+
+    @Override
+    public String get(String key, String... args) {
+        return this.get(key).formatted((Object[]) args);
+    }
 }

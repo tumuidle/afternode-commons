@@ -22,9 +22,14 @@ public class ConfigurationLocalizations implements ILocalizations {
     public String get(String key, Map<String, Object> placeholders) {
         String base = get(key);
         for (String s : placeholders.keySet()) {
-            base.replace("%" + s + "%", String.valueOf(placeholders.get(s)));
+            base = base.replace("%" + s + "%", String.valueOf(placeholders.get(s)));
         }
         return base;
+    }
+
+    @Override
+    public String get(String key, String... args) {
+        return this.get(key).formatted((Object[]) args);
     }
 
     /**
