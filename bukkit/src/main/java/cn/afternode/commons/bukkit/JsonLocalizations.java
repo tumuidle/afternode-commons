@@ -1,9 +1,12 @@
 package cn.afternode.commons.bukkit;
 
-import cn.afternode.commons.localizations.ILocalizations;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -12,8 +15,10 @@ import java.util.Objects;
 /**
  * Minecraft style *.json language file
  */
-public class JsonLocalizations implements ILocalizations {
+public class JsonLocalizations implements IAdventureLocalizations {
     private final JsonObject lang;
+    private LegacyComponentSerializer legacy = LegacyComponentSerializer.legacySection();
+    private MiniMessage mini = MiniMessage.miniMessage();
 
     /**
      * Load from JsonObject
@@ -91,5 +96,45 @@ public class JsonLocalizations implements ILocalizations {
 
     public static String getResourcePath(String namespace, String langCode) {
         return "assets/%s/lang/%s.json".formatted(namespace, langCode);
+    }
+
+    @Override
+    public TextComponent legacy(String key) {
+        return this.legacy.deserialize(this.get(key));
+    }
+
+    @Override
+    public TextComponent legacy(String key, Map<String, Object> placeholders) {
+        return this.legacy.deserialize(this.get(key, placeholders));
+    }
+
+    @Override
+    public TextComponent legacy(String key, String... args) {
+        return this.legacy.deserialize(this.get(key, args));
+    }
+
+    @Override
+    public Component mini(String key) {
+        return this.mini.deserialize(this.get(key));
+    }
+
+    @Override
+    public Component mini(String key, Map<String, Object> placeholders) {
+        return this.mini.deserialize(this.get(key, placeholders));
+    }
+
+    @Override
+    public Component mini(String key, String... args) {
+        return this.mini.deserialize(this.get(key, args));
+    }
+
+    @Override
+    public void withLegacySerializer(LegacyComponentSerializer serializer) {
+        this.legacy = serializer;
+    }
+
+    @Override
+    public void withMiniMessage(MiniMessage mm) {
+        this.mini = mm;
     }
 }
