@@ -18,7 +18,7 @@ public class ConfigurationsSerializer {
      * @throws FieldAccessException Field access error
      */
     public static <T> T deserialize(ConfigurationSection config, T object) {
-        for (Field f: object.getClass().getFields()) {
+        for (Field f: object.getClass().getDeclaredFields()) {
             try {
                 if (f.isAnnotationPresent(ConfigSerialization.Ignore.class)) continue;
 
@@ -79,7 +79,7 @@ public class ConfigurationsSerializer {
      * @throws FieldAccessException Field access error
      */
     public static void serialize(ConfigurationSection dest, Object src) throws FieldAccessException {
-        for (Field f: src.getClass().getFields()) {
+        for (Field f: src.getClass().getDeclaredFields()) {
             if (f.isAnnotationPresent(ConfigSerialization.Ignore.class)) continue;
 
             String key;
