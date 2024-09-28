@@ -5,6 +5,7 @@ import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
 import cn.afternode.commons.bukkit.configurations.ConfigurationMerger;
+import cn.afternode.commons.bukkit.gui.GuiManager;
 import cn.afternode.commons.bukkit.message.CallbackCommand;
 import cn.afternode.commons.bukkit.message.MessageBuilder;
 import cn.afternode.commons.bukkit.report.PluginReport;
@@ -40,6 +41,7 @@ public class BukkitPluginContext {
     private ILocalizations localizations = null;
 
     private CallbackCommand callbackCommand = null;
+    private GuiManager guiManager = null;
 
     /**
      * @param plg Plugin instance will be used in registrations
@@ -319,5 +321,17 @@ public class BukkitPluginContext {
      */
     public CallbackCommand getCallbackCommand() {
         return callbackCommand;
+    }
+
+    /**
+     * Get or create a GuiManager instance
+     * @return Current or new
+     * @see GuiManager
+     */
+    public GuiManager getGuiManager() {
+        if (this.guiManager == null) {
+            this.guiManager = new GuiManager(this.plugin);
+        }
+        return guiManager;
     }
 }
