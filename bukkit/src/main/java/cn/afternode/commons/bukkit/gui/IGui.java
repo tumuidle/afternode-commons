@@ -71,7 +71,8 @@ public interface IGui {
      * @param who Who clicked
      * @param event Click event
      * @param gui Opened GUI data
+     * @return If event cancellation needed
      */
     @ApiStatus.Internal
-    void onSlotClick(Player who, InventoryClickEvent event, OpenedGui gui);
+    boolean onSlotClick(Player who, InventoryClickEvent event, OpenedGui gui);
 }

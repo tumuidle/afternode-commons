@@ -103,15 +103,13 @@ public class InventoryGui implements IGui {
     }
 
     @Override
-    public void onSlotClick(Player who, InventoryClickEvent event, OpenedGui gui) {
-        if (event.getSlot() > this.size)
-            return;
+    public boolean onSlotClick(Player who, InventoryClickEvent event, OpenedGui gui) {
+        int slot = event.getSlot();
 
-        GuiClickCallback callback = this.callback.get(event.getSlot());
+        GuiClickCallback callback = this.callback.get(slot);
         if (callback != null)
-            callback.callback(event, who, items[event.getSlot()], gui);
+            callback.callback(event, who, items[slot], gui);
 
-        if (!this.dontBlockOperation.contains(event.getSlot()))
-            event.setCancelled(true);
+        return !this.dontBlockOperation.contains(event.getRawSlot());
     }
 }

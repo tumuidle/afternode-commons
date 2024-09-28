@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
@@ -71,13 +71,14 @@ public class GuiManager implements Listener {
      */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getSlot() != event.getRawSlot())
-            return;
-
         HumanEntity who = event.getWhoClicked();
         if (who instanceof Player player && opened.containsKey(player.getUniqueId())) {
             OpenedGui gui = opened.get(player.getUniqueId());
-            gui.gui().onSlotClick(player, event, gui);
+            if (event.getSlot() == event.getRawSlot()) {
+                event.setCancelled(gui.gui().onSlotClick(player, event, gui));
+            } else if (event.getSlotType() == InventoryType.SlotType.QUICKBAR) {
+                event.setCancelled(true);
+            }
         }
     }
 }
