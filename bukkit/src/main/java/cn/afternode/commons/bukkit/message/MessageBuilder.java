@@ -1,5 +1,6 @@
 package cn.afternode.commons.bukkit.message;
 
+import cn.afternode.commons.bukkit.BukkitPluginContext;
 import cn.afternode.commons.localizations.ILocalizations;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -9,12 +10,14 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.Map;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 public class MessageBuilder {
     private ILocalizations localizations;
@@ -181,6 +184,29 @@ public class MessageBuilder {
     public MessageBuilder click(ClickEvent event) {
         this.component.clickEvent(event);
         return this;
+    }
+
+    /**
+     * Register click callback
+     * @param once If the callback can only be triggered once
+     * @param callback Callback function
+     * @return This builder
+     * @see CallbackCommand#register(boolean, Consumer)
+     */
+    public MessageBuilder click(BukkitPluginContext context, boolean once, Consumer<Player> callback) {
+        RegisteredClickCallback reg = context.getCallbackCommand().register(once, callback);
+        return this.click(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/%s:%s %s".formatted(context.getPlugin().getName(), context.getCallbackCommand().getName(), reg.id())));
+    }
+
+    /**
+     * Register a callback that can only be triggered once
+     * @param callback Callback function
+     * @return This builder
+     * @see CallbackCommand#register(Consumer)
+     */
+    public MessageBuilder click(BukkitPluginContext context, Consumer<Player> callback) {
+        RegisteredClickCallback reg = context.getCallbackCommand().register(callback);
+        return this.click(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/%s:%s %s".formatted(context.getPlugin().getName(), context.getCallbackCommand().getName(), reg.id())));
     }
 
     /**

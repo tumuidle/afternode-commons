@@ -5,6 +5,7 @@ import cn.afternode.commons.bukkit.annotations.RegisterCommand;
 import cn.afternode.commons.bukkit.annotations.RegisterListener;
 import cn.afternode.commons.bukkit.annotations.RegisterPluginCommand;
 import cn.afternode.commons.bukkit.configurations.ConfigurationMerger;
+import cn.afternode.commons.bukkit.message.CallbackCommand;
 import cn.afternode.commons.bukkit.message.MessageBuilder;
 import cn.afternode.commons.bukkit.report.PluginReport;
 import cn.afternode.commons.localizations.ILocalizations;
@@ -37,6 +38,8 @@ public class BukkitPluginContext {
     private ComponentLike messageLinePrefix = Component.text().build();
     private boolean messageBuilderStyleStack = false;
     private ILocalizations localizations = null;
+
+    private CallbackCommand callbackCommand = null;
 
     /**
      * @param plg Plugin instance will be used in registrations
@@ -295,5 +298,26 @@ public class BukkitPluginContext {
                 return out;
             }
         }
+    }
+
+    /**
+     * Register a callback command for message component click event to bukkit
+     * @return Command instance
+     */
+    public CallbackCommand createCallbackCommand() {
+        if (this.callbackCommand != null)
+            throw new IllegalStateException("Callback already registered for this context");
+
+        this.callbackCommand = new CallbackCommand();
+        Bukkit.getCommandMap().register(this.plugin.getName(), this.callbackCommand);
+        return this.callbackCommand;
+    }
+
+    /**
+     * Get current registered callback command
+     * @return Command instance
+     */
+    public CallbackCommand getCallbackCommand() {
+        return callbackCommand;
     }
 }
