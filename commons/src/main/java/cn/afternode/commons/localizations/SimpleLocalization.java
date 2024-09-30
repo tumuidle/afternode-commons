@@ -6,6 +6,8 @@ import java.io.StringReader;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Simple localizations using properties file
@@ -40,6 +42,14 @@ public class SimpleLocalization implements ILocalizations {
      */
     public SimpleLocalization(InputStream stream) throws IOException {
         prop.load(stream);
+    }
+
+    /**
+     * Create from existing Properties
+     * @param properties properties
+     */
+    public SimpleLocalization(Properties properties) {
+        prop.putAll(properties);
     }
 
     /**
@@ -82,5 +92,20 @@ public class SimpleLocalization implements ILocalizations {
     @Override
     public String get(String key, String... args) {
         return get(key).formatted((Object[]) args);
+    }
+
+    @Override
+    public Set<String> keys() {
+        return this.prop.keySet().stream().map(String::valueOf).collect(Collectors.toSet());
+    }
+
+    @Override
+    public SimpleLocalization withFallback(ILocalizations fallback) {
+        Properties n = new Properties();
+        for (String key : fallback.keys()) {
+            n.put(key, fallback.get(key));
+        }
+        n.putAll(this.prop);
+        return new SimpleLocalization(n);
     }
 }

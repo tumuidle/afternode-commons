@@ -1,5 +1,6 @@
 package cn.afternode.commons.bukkit;
 
+import cn.afternode.commons.localizations.ILocalizations;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,6 +12,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Minecraft style *.json language file
@@ -94,6 +96,11 @@ public class JsonLocalizations implements IAdventureLocalizations {
         return this.get(key).formatted((Object[]) args);
     }
 
+    @Override
+    public Set<String> keys() {
+        return this.lang.keySet();
+    }
+
     public static String getResourcePath(String namespace, String langCode) {
         return "assets/%s/lang/%s.json".formatted(namespace, langCode);
     }
@@ -136,5 +143,14 @@ public class JsonLocalizations implements IAdventureLocalizations {
     @Override
     public void withMiniMessage(MiniMessage mm) {
         this.mini = mm;
+    }
+
+    @Override
+    public JsonLocalizations withFallback(ILocalizations fallback) {
+        JsonObject n = this.lang.deepCopy();
+        for (String key : fallback.keys()) {
+            n.addProperty(key, fallback.get(key));
+        }
+        return new JsonLocalizations(n);
     }
 }

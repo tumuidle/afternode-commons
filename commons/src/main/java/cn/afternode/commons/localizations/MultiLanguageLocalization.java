@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Localizations provider with properties format
@@ -93,5 +95,10 @@ public class MultiLanguageLocalization implements ILocalizations {
     @Override
     public String get(String key, String... args) {
         return this.get(key).formatted((Object[]) args);
+    }
+
+    @Override
+    public Set<String> keys() {
+        return this.prop.keySet().stream().map(String::valueOf).collect(Collectors.toSet());
     }
 }

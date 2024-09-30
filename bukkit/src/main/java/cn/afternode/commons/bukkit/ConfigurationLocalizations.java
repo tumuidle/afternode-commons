@@ -1,10 +1,13 @@
 package cn.afternode.commons.bukkit;
 
+import cn.afternode.commons.localizations.ILocalizations;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.configuration.MemorySection;
 
 import java.util.Map;
 import java.util.Set;
@@ -55,6 +58,7 @@ public class ConfigurationLocalizations implements IAdventureLocalizations {
      * Get keys in current localizations
      * @return Keys
      */
+    @Override
     public Set<String> keys() {
         return config.getKeys(true);
     }
@@ -97,5 +101,17 @@ public class ConfigurationLocalizations implements IAdventureLocalizations {
     @Override
     public void withMiniMessage(MiniMessage mm) {
         this.mini = mm;
+    }
+
+    @Override
+    public ConfigurationLocalizations withFallback(ILocalizations fallback) {
+        MemorySection sec = new MemoryConfiguration();
+        for (String key : fallback.keys()) {
+            sec.set(key, fallback.get(key));
+        }
+        for (String key : this.config.getKeys(true)) {
+            sec.set(key, this.config.get(key));
+        }
+        return new ConfigurationLocalizations(sec);
     }
 }

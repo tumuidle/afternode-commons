@@ -1,6 +1,7 @@
 package cn.afternode.commons.localizations;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface ILocalizations {
     /**
@@ -26,4 +27,17 @@ public interface ILocalizations {
      * @see String#formatted(Object...)
      */
     String get(String key, String... args);
+
+    /**
+     * Get keys from localizations
+     * @return Keys
+     */
+    Set<String> keys();
+
+    /**
+     * Create new localizations instance and merge fallback
+     * @param fallback fallback
+     * @return new instance
+     */
+    default ILocalizations withFallback(ILocalizations fallback) { throw new UnsupportedOperationException("This localizations does not support fallback"); }
 }

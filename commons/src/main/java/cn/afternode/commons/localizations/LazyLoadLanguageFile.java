@@ -2,11 +2,9 @@ package cn.afternode.commons.localizations;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Language file with lazy-load
@@ -128,5 +126,10 @@ public class LazyLoadLanguageFile implements ILocalizations {
      */
     public void clearIgnore() {
         this.ignoreKeys.clear();
+    }
+
+    @Override
+    public Set<String> keys() {
+        return this.prop.keySet().stream().map(String::valueOf).collect(Collectors.toSet());
     }
 }
