@@ -1,6 +1,7 @@
 package cn.afternode.commons.bukkit.message;
 
 import cn.afternode.commons.bukkit.BukkitPluginContext;
+import cn.afternode.commons.bukkit.IAdventureLocalizations;
 import cn.afternode.commons.localizations.ILocalizations;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -23,6 +24,7 @@ public class MessageBuilder {
     private ILocalizations localizations;
     private ComponentLike linePrefix = Component.text();
     private CommandSender sender;
+    private IAdventureLocalizations.LocalizeMode localizeMode = IAdventureLocalizations.LocalizeMode.RAW;
 
     private Stack<ComponentStyle> styleStack = null;
 
@@ -107,8 +109,15 @@ public class MessageBuilder {
     public MessageBuilder localize(String key, Map<String, Object> placeholders) {
         if (localizations == null)
             throw new NullPointerException("No localizations passed to this builder");
-        ComponentStyle style = style();
-        component.append(style == null ? Component.text(this.localizations.get(key, placeholders)) : Component.text(this.localizations.get(key, placeholders), style.build()));
+
+        if (localizeMode == IAdventureLocalizations.LocalizeMode.RAW) {
+            ComponentStyle style = style();
+            component.append(style == null ? Component.text(this.localizations.get(key, placeholders)) : Component.text(this.localizations.get(key, placeholders), style.build()));
+        } else {
+            if (this.localizations instanceof IAdventureLocalizations advntr) {
+                component.append(this.localizeMode == IAdventureLocalizations.LocalizeMode.LEGACY ? advntr.legacy(key, placeholders) : advntr.mini(key, placeholders));
+            } else throw new UnsupportedOperationException(this.localizations.getClass().getName() + " does not supports " + this.localizeMode.name() + " mode");
+        }
         return this;
     }
 
@@ -123,8 +132,36 @@ public class MessageBuilder {
     public MessageBuilder localize(String key) {
         if (localizations == null)
             throw new NullPointerException("No localizations passed to this builder");
-        ComponentStyle style = style();
-        component.append(style == null ? Component.text(this.localizations.get(key)) : Component.text(this.localizations.get(key), style.build()));
+
+        if (localizeMode == IAdventureLocalizations.LocalizeMode.RAW) {
+            ComponentStyle style = style();
+            component.append(style == null ? Component.text(this.localizations.get(key)) : Component.text(this.localizations.get(key), style.build()));
+        } else {
+            if (this.localizations instanceof IAdventureLocalizations advntr) {
+                component.append(this.localizeMode == IAdventureLocalizations.LocalizeMode.LEGACY ? advntr.legacy(key) : advntr.mini(key));
+            } else throw new UnsupportedOperationException(this.localizations.getClass().getName() + " does not supports " + this.localizeMode.name() + " mode");
+        }
+        return this;
+    }
+
+    /**
+     * Append formatted localized text, a localizations object must be passed to this builder
+     * @param key Localization key
+     * @param args Formatter replacements
+     * @return This builder
+     */
+    public MessageBuilder localize(String key, String... args) {
+        if (localizations == null)
+            throw new NullPointerException("No localizations passed to this builder");
+
+        if (localizeMode == IAdventureLocalizations.LocalizeMode.RAW) {
+            ComponentStyle style = style();
+            component.append(style == null ? Component.text(this.localizations.get(key, args)) : Component.text(this.localizations.get(key, args), style.build()));
+        } else {
+            if (this.localizations instanceof IAdventureLocalizations advntr) {
+                component.append(this.localizeMode == IAdventureLocalizations.LocalizeMode.LEGACY ? advntr.legacy(key, args) : advntr.mini(key, args));
+            } else throw new UnsupportedOperationException(this.localizations.getClass().getName() + " does not supports " + this.localizeMode.name() + " mode");
+        }
         return this;
     }
 
@@ -357,6 +394,15 @@ public class MessageBuilder {
 
     public MessageBuilder linePrefix(ComponentLike prefix) {
         this.linePrefix = prefix;
+        return this;
+    }
+
+    public IAdventureLocalizations.LocalizeMode getLocalizeMode() {
+        return localizeMode;
+    }
+
+    public MessageBuilder localizeMode(IAdventureLocalizations.LocalizeMode mode) {
+        this.localizeMode = mode;
         return this;
     }
 

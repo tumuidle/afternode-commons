@@ -68,4 +68,21 @@ public interface IAdventureLocalizations extends ILocalizations {
      * @param mm instance
      */
     void withMiniMessage(MiniMessage mm);
+
+    enum LocalizeMode {
+        /**
+         * Use raw text
+         */
+        RAW,
+
+        /**
+         * Use legacy serializer
+         */
+        LEGACY,
+
+        /**
+         * Use MiniMessage serializer
+         */
+        MM
+    }
 }
