@@ -147,9 +147,12 @@ public class JsonLocalizations implements IAdventureLocalizations {
 
     @Override
     public JsonLocalizations withFallback(ILocalizations fallback) {
-        JsonObject n = this.lang.deepCopy();
+        JsonObject n = new JsonObject();
         for (String key : fallback.keys()) {
             n.addProperty(key, fallback.get(key));
+        }
+        for (String key : this.lang.keySet()) {
+            n.add(key, this.lang.get(key));
         }
         return new JsonLocalizations(n);
     }
