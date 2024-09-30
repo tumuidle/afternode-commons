@@ -18,9 +18,20 @@ public interface IGui {
     /**
      * Set click callback in specified slot
      * @param slot slot number
-     * @param callback item
+     * @param callback callback
      */
     void putCallback(int slot, GuiClickCallback callback);
+
+    /**
+     * Put item in specified slot with callback
+     * @param slot slot number
+     * @param item item
+     * @param callback callback
+     */
+    default void callbackItem(int slot, ItemStack item, GuiClickCallback callback) {
+        this.putItem(slot, item);
+        this.putCallback(slot, callback);
+    }
 
     /**
      * Set a slot that does not block operations
