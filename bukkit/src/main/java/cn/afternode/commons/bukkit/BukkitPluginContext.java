@@ -39,6 +39,7 @@ public class BukkitPluginContext {
     private ComponentLike messageLinePrefix = Component.text().build();
     private boolean messageBuilderStyleStack = false;
     private ILocalizations localizations = null;
+    private IAdventureLocalizations.LocalizeMode defaultLocalizeMode = IAdventureLocalizations.LocalizeMode.RAW;
 
     private CallbackCommand callbackCommand = null;
     private GuiManager guiManager = null;
@@ -172,7 +173,9 @@ public class BukkitPluginContext {
      * @return builder
      */
     public MessageBuilder message(CommandSender sender) {
-        return new MessageBuilder(localizations, messageLinePrefix, sender, messageBuilderStyleStack);
+        MessageBuilder mb = new MessageBuilder(localizations, messageLinePrefix, sender, messageBuilderStyleStack);
+        mb.localizeMode(this.defaultLocalizeMode);
+        return mb;
     }
 
     /**
@@ -180,7 +183,9 @@ public class BukkitPluginContext {
      * @return builder
      */
     public MessageBuilder message() {
-        return new MessageBuilder(localizations, messageLinePrefix, null, messageBuilderStyleStack);
+        MessageBuilder mb = new MessageBuilder(localizations, messageLinePrefix, null, messageBuilderStyleStack);
+        mb.localizeMode(this.defaultLocalizeMode);
+        return mb;
     }
 
     /**
@@ -237,6 +242,22 @@ public class BukkitPluginContext {
      */
     public void setLocalizations(ILocalizations localizations) {
         this.localizations = localizations;
+    }
+
+    /**
+     * Get default localize mode of this context
+     * @return Mode
+     */
+    public IAdventureLocalizations.LocalizeMode getDefaultLocalizeMode() {
+        return defaultLocalizeMode;
+    }
+
+    /**
+     * Set default localize mode of this context
+     * @param defaultLocalizeMode Mode
+     */
+    public void setDefaultLocalizeMode(IAdventureLocalizations.LocalizeMode defaultLocalizeMode) {
+        this.defaultLocalizeMode = defaultLocalizeMode;
     }
 
     /**
