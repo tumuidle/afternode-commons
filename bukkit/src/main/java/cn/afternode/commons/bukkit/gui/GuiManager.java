@@ -75,7 +75,11 @@ public class GuiManager implements Listener {
         if (who instanceof Player player && opened.containsKey(player.getUniqueId())) {
             OpenedGui gui = opened.get(player.getUniqueId());
             if (event.getSlot() == event.getRawSlot()) {
-                event.setCancelled(gui.gui().onSlotClick(player, event, gui));
+                try {
+                    event.setCancelled(gui.gui().onSlotClick(player, event, gui));
+                } catch (Throwable t) {
+                    throw new RuntimeException("Error handling click on player %s, slot %s".formatted(player.getName(), event.getSlot()), t);
+                }
             } else if (event.getSlotType() == InventoryType.SlotType.QUICKBAR) {
                 event.setCancelled(true);
             }
