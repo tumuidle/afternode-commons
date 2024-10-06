@@ -19,6 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
@@ -293,7 +294,7 @@ public class BukkitPluginContext {
     public YamlConfiguration loadConfiguration(String path) throws IOException, NullPointerException {
         Path pth = plugin.getDataFolder().toPath().resolve(path);
         if (!Files.exists(pth)) {
-            try (InputStream in = Objects.requireNonNull(plugin.getResource(path), () -> String.format("%s @ resource", path))) {
+            try (InputStream in = this.getResourceStrict(path)) {
                 Files.copy(in, pth);
             }
         }
@@ -309,7 +310,7 @@ public class BukkitPluginContext {
      */
     public YamlConfiguration upgradeConfiguration(String path) throws IOException, NullPointerException {
         Path pth = plugin.getDataFolder().toPath().resolve(path);
-        try (InputStream in = Objects.requireNonNull(plugin.getResource(path), () -> String.format("%s @ resource", path))) {
+        try (InputStream in = this.getResourceStrict(path)) {
             YamlConfiguration latest = YamlConfiguration.loadConfiguration(new InputStreamReader(in));
             if (!Files.exists(pth)) {
                 Files.copy(in, pth);
@@ -354,5 +355,14 @@ public class BukkitPluginContext {
             this.guiManager = new GuiManager(this.plugin);
         }
         return guiManager;
+    }
+
+    public @NotNull InputStream getResourceStrict(String path) {
+        InputStream in = this.plugin.getClass().getClassLoader().getResourceAsStream(path);
+        if (in == null)
+            in = this.plugin.getClass().getResourceAsStream(path);
+        if (in == null)
+            throw new NullPointerException(path + " @ resource");
+        return in;
     }
 }
