@@ -71,6 +71,18 @@ public interface IGui {
     int getSize();
 
     /**
+     * Fill with specified item
+     * @param start start slot
+     * @param end end slot
+     * @param item item
+     */
+    default void fill(int start, int end, ItemStack item) {
+        for (int i = start; i < end; i++) {
+            this.putItem(i, item);
+        }
+    }
+
+    /**
      * Create new inventory with specified owner
      * @param holder owner
      * @return created
