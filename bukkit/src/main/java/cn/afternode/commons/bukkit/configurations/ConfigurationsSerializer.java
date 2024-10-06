@@ -22,6 +22,9 @@ public class ConfigurationsSerializer {
             try {
                 if (f.isAnnotationPresent(ConfigSerialization.Ignore.class)) continue;
 
+                if (!f.canAccess(object))
+                    f.trySetAccessible();
+
                 String key;
                 if (f.isAnnotationPresent(ConfigSerialization.Name.class)) {
                     key = f.getAnnotation(ConfigSerialization.Name.class).value();
