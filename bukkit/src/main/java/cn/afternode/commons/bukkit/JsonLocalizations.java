@@ -79,7 +79,7 @@ public class JsonLocalizations implements IAdventureLocalizations {
     @Override
     public String get(String key) {
         JsonElement el = lang.get(key);
-        return el.isJsonPrimitive() ? el.getAsString() : key;
+        return key != null && el.isJsonPrimitive() ? el.getAsString() : key;
     }
 
     @Override
