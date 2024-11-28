@@ -2,6 +2,7 @@ package cn.afternode.commons.bukkit.kotlin
 
 import cn.afternode.commons.bukkit.message.ComponentStyle
 import cn.afternode.commons.bukkit.message.MessageBuilder
+import net.kyori.adventure.text.Component
 import org.bukkit.permissions.Permission
 
 fun MessageBuilder.localize(key: String, vararg p: Pair<String, Any>): MessageBuilder =
@@ -26,7 +27,7 @@ fun MessageBuilder.append(builder: MessageBuilder): MessageBuilder {
     return this
 }
 
-fun MessageBuilder.sub(styleStack: Boolean = false, block: MessageBuilder.() -> Unit): MessageBuilder {
+fun MessageBuilder.sub(styleStack: Boolean = false, linePrefix: Component? = null, block: MessageBuilder.() -> Unit): MessageBuilder {
     val builder = MessageBuilder(localizations, linePrefix, sender, styleStack)
     block(builder)
     this.append(builder)
