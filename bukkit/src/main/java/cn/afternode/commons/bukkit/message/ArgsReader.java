@@ -184,6 +184,7 @@ public class ArgsReader {
             // read long string
             StringBuilder sb = new StringBuilder();
             sb.append(first.substring(1));
+            index ++;
             String read = this.read(index);
 
             while (read != null) {
@@ -208,7 +209,7 @@ public class ArgsReader {
      * @return result
      */
     public String readString() {
-        String first = this.read(this.readerIndex);
+        String first = this.next();
         if (first.startsWith("\"")) {
             // read long string
             StringBuilder sb = new StringBuilder();
@@ -216,6 +217,7 @@ public class ArgsReader {
             String read = this.next();
 
             while (read != null) {
+                sb.append(" ");
                 if (read.endsWith("\"")) {
                     sb.append(read, 0, read.length() - 1);
                     break;
